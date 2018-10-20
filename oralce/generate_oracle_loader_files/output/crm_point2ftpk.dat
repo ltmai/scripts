@@ -1,0 +1,37 @@
+------------------------------------------------------------------------
+-- (c) 2018 ENisco GmbH u. Co KG
+--
+--
+--
+-- SQL*Loader control file that describes how to load the data
+-- into table
+------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE crm_point2ftpk.dsc
+REPLACE
+INTO TABLE crm_point2ftpk
+WHEN (coord != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+coord,        -- VARCHAR2(32) NOT NULL
+tmname,        -- VARCHAR2(6) NOT NULL
+deviceid,        -- NUMBER(22) NOT NULL
+forkid,        -- NUMBER(22) NOT NULL
+tutypeclassid,        -- NUMBER(22) NOT NULL
+indevice,        -- VARCHAR2(4) NOT NULL
+inftpk,        -- VARCHAR2(32) NOT NULL
+outdevice,        -- VARCHAR2(4) NOT NULL
+outftpk        -- VARCHAR2(32) NOT NULL
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, coord    ,tmname    ,deviceid    ,forkid    ,tutypeclassid    ,indevice    ,inftpk    ,outdevice    ,outftpk
+~F021-1600RB1~	,~CRM~	,~1~	,~1~	,~0~	,~F011~	,~01010501~	,~F011~	,~01010501~
+~F031-0100RB1~	,~CRM~	,~1~	,~1~	,~0~	,~F011~	,~01010203~	,~F011~	,~01010203~
+~HBW~	,~CRM~	,~1~	,~1~	,~0~	,~F011~	,~HBW~	,~F011~	,~HBW~
+
+

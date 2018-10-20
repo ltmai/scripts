@@ -1,0 +1,55 @@
+------------------------------------------------------------------------
+-- (c) 2018 ENisco GmbH u. Co KG
+--
+--
+--
+-- SQL*Loader control file that describes how to load the data
+-- into table
+------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE egw_channel.dsc
+REPLACE
+INTO TABLE egw_channel
+WHEN (channelid != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+channelid,        -- NUMBER(22) NOT NULL
+protocoltype,        -- NUMBER(22) DEFAULT 1  NOT NULL
+ownname,        -- VARCHAR2(4) NOT NULL
+partnername,        -- VARCHAR2(4) NOT NULL
+status,        -- NUMBER(22)
+commstatus,        -- NUMBER(22)
+errorcode,        -- NUMBER(22)
+cnt_msgsin,        -- NUMBER(22)
+cnt_msgsout,        -- NUMBER(22)
+seq_in,        -- NUMBER(22)
+seq_out,        -- NUMBER(22)
+last_sent,        -- VARCHAR2(50)
+docnum,        -- NUMBER(22)
+process,        -- VARCHAR2(15)
+nic,        -- VARCHAR2(64)
+ipaddr,        -- VARCHAR2(64)
+portnr,        -- NUMBER(22)
+cportnr,        -- NUMBER(22)
+fixed_telelen,        -- NUMBER(22)
+acktimeout,        -- NUMBER(22)
+rc_delay,        -- NUMBER(22)
+wait_quit,        -- NUMBER(22)
+flow,        -- VARCHAR2(128)
+udpport,        -- NUMBER(22)
+textid,        -- NUMBER(22)
+last_read,        -- VARCHAR2(50)
+locked        -- NUMBER(22) DEFAULT 0  NOT NULL
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, channelid    ,protocoltype    ,ownname    ,partnername    ,status    ,commstatus    ,errorcode    ,cnt_msgsin    ,cnt_msgsout    ,seq_in    ,seq_out    ,last_sent    ,docnum    ,process    ,nic    ,ipaddr    ,portnr    ,cportnr    ,fixed_telelen    ,acktimeout    ,rc_delay    ,wait_quit    ,flow    ,udpport    ,textid    ,last_read    ,locked
+~1~	,~1~	,~EMES~	,~F021~	,~1~	,~6~	,~0~	,~0~	,~0~	,~4~	,~97~	,~Thu Sep 27 14:03:43 CEST 2018~	,~~	,~PDV_EN_TCP_0000~	,~~	,~172.31.100.230~	,~5000~	,~5000~	,~136~	,~10~	,~60~	,~0~	,~PRJ PALLET CONVEYOR TELEGRAMM RECEIVED~	,~6001~	,~~	,~~	,~1~
+~2~	,~1~	,~EMES~	,~F031~	,~1~	,~1~	,~0~	,~0~	,~0~	,~1~	,~52~	,~Thu Sep 27 15:46:32 CEST 2018~	,~~	,~PDV_EN_TCP_0000~	,~~	,~172.31.100.230~	,~5000~	,~5000~	,~136~	,~10~	,~60~	,~0~	,~PRJ PALLET CONVEYOR TELEGRAMM RECEIVED~	,~6002~	,~~	,~~	,~1~
+~3~	,~1~	,~EMES~	,~F011~	,~1~	,~6~	,~0~	,~0~	,~0~	,~5~	,~28~	,~Tue Oct 09 16:40:16 CEST 2018~	,~~	,~PDV_EN_TCP_0000~	,~~	,~172.31.100.230~	,~5000~	,~5000~	,~136~	,~10~	,~60~	,~0~	,~PRJ STACKER CRANE TELEGRAMM RECEIVED~	,~6003~	,~~	,~~	,~1~
+
+

@@ -1,0 +1,40 @@
+------------------------------------------------------------------------
+-- (c) 2018 ENisco GmbH u. Co KG
+--
+--
+--
+-- SQL*Loader control file that describes how to load the data
+-- into table
+------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE prj_shuttle.dsc
+REPLACE
+INTO TABLE prj_shuttle
+WHEN (id != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+id,        -- NUMBER(22) NOT NULL
+tmname,        -- VARCHAR2(6) NOT NULL
+deviceid,        -- NUMBER(22) NOT NULL
+indevice,        -- VARCHAR2(4)
+inftpk,        -- VARCHAR2(32)
+coord,        -- VARCHAR2(32)
+outdevice,        -- VARCHAR2(4)
+outftpk,        -- VARCHAR2(32)
+positioning_point,        -- VARCHAR2(32)
+toid        -- NUMBER(22)
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, id    ,tmname    ,deviceid    ,indevice    ,inftpk    ,coord    ,outdevice    ,outftpk    ,positioning_point    ,toid
+~1~	,~PCS~	,~101~	,~F021~	,~F021-0300VS1~	,~F021-0300RB1~	,~F021~	,~F021-0300VS1~	,~~	,~~
+~2~	,~PCS~	,~102~	,~F031~	,~F031-0300VS1~	,~F031-0300RB1~	,~F031~	,~F031-0300VS1~	,~~	,~~
+~3~	,~PCS~	,~103~	,~F031~	,~F031-0900VS1~	,~F031-0900RB1~	,~F031~	,~F031-0900VS1~	,~~	,~~
+~4~	,~PCS~	,~104~	,~F031~	,~F031-1900VS1~	,~F031-1900RB1~	,~F031~	,~F031-1900VS1~	,~~	,~~
+~5~	,~PCS~	,~105~	,~F031~	,~F031-2700VS1~	,~F031-2700RB1~	,~F031~	,~F031-2700VS1~	,~~	,~~
+
+

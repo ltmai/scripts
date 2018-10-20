@@ -1,0 +1,32 @@
+------------------------------------------------------------------------
+-- (c) 2018 ENisco GmbH u. Co KG
+--
+--
+--
+-- SQL*Loader control file that describes how to load the data
+-- into table
+------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE crm_tmerror2proc.dsc
+REPLACE
+INTO TABLE crm_tmerror2proc
+WHEN (tmname != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+tmname,        -- VARCHAR2(6) NOT NULL
+deviceid,        -- NUMBER(22) NOT NULL
+forkid,        -- NUMBER(22) NOT NULL
+tmerrorcode,        -- NUMBER(22) NOT NULL
+proc        -- VARCHAR2(128)
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, tmname    ,deviceid    ,forkid    ,tmerrorcode    ,proc
+~CRM~	,~1~	,~1~	,~1004~	,~prj_crm_mgr.destOccupied~
+~CRM~	,~1~	,~1~	,~1003~	,~prj_crm_mgr.sourceEmpty~
+
+

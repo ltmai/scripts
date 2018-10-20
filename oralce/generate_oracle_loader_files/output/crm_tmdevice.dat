@@ -1,0 +1,31 @@
+------------------------------------------------------------------------
+-- (c) 2018 ENisco GmbH u. Co KG
+--
+--
+--
+-- SQL*Loader control file that describes how to load the data
+-- into table
+------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE crm_tmdevice.dsc
+REPLACE
+INTO TABLE crm_tmdevice
+WHEN (tmname != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+tmname,        -- VARCHAR2(6) NOT NULL
+deviceid,        -- NUMBER(22) NOT NULL
+dispoproc,        -- VARCHAR2(32)
+dispoinfo,        -- VARCHAR2(32)
+dispoinfodate        -- DATE(7)
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, tmname    ,deviceid    ,dispoproc    ,dispoinfo    ,dispoinfodate
+~CRM~	,~1~	,~crm_dispo.simpleDispo~	,~OUT~	,~~
+
+

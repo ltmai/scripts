@@ -1,0 +1,36 @@
+------------------------------------------------------------------------
+-- (c) 2018 ENisco GmbH u. Co KG
+--
+--
+--
+-- SQL*Loader control file that describes how to load the data
+-- into table
+------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE mfc_tmdevice.dsc
+REPLACE
+INTO TABLE mfc_tmdevice
+WHEN (tmname != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+tmname,        -- VARCHAR2(6) NOT NULL
+deviceid,        -- NUMBER(22) NOT NULL
+channelid        -- NUMBER(22) NOT NULL
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, tmname    ,deviceid    ,channelid
+~CRM~	,~1~	,~3~
+~PCS~	,~2~	,~2~
+~PCS~	,~105~	,~2~
+~PCS~	,~102~	,~2~
+~PCS~	,~103~	,~2~
+~PCS~	,~104~	,~2~
+~PCS~	,~1~	,~1~
+~PCS~	,~101~	,~1~
+
+

@@ -1,10 +1,15 @@
+SET LINESIZE 512
+SET WRAP ON
+SET VERIFY OFF
+SET SERVEROUTPUT ON
+WHENEVER SQLERROR EXIT
+SPOOL INSERTscript.sql REPLACE
+
 DECLARE
 
     PROCEDURE createInsertScript(tableNameIn VARCHAR2)
     IS
         tableName VARCHAR2(32) := UPPER(tableNameIn);
-
-        fieldList VARCHAR2(1024);
 
         selectCmd VARCHAR2(2048);
 
@@ -16,7 +21,7 @@ DECLARE
         CURSOR tableColumns(tableName VARCHAR2)
         IS
             SELECT * --column_name, data_type, data_length, column_id, nullable, data_default
-              FROM all_tab_columns
+              FROM user_tab_columns
              WHERE table_name=tableName
              ORDER BY column_id;
 
@@ -26,7 +31,7 @@ DECLARE
         CURSOR pkColumns(tableName VARCHAR2)
         IS
             SELECT cols.column_name
-              FROM all_constraints cons, all_cons_columns cols
+              FROM user_constraints cons, user_cons_columns cols
              WHERE cols.table_name = tableName
                AND cons.constraint_type = 'P'
                AND cons.constraint_name = cols.constraint_name
@@ -83,7 +88,7 @@ DECLARE
         /*
         ** returns column value as text depending on column data type
         */
-        FUNCTION getColumnValue(r all_tab_columns%ROWTYPE)
+        FUNCTION getColumnValue(r user_tab_columns%ROWTYPE)
             RETURN VARCHAR2
         IS
             ret VARCHAR2(128);
@@ -144,8 +149,7 @@ DECLARE
 
     BEGIN -- createInsertScript
 
-        fieldList := getFieldList(tableName);
-        selectCmd := 'SELECT ' || fieldList || ' FROM ' || tableName || ' ORDER BY ' || getPkColumns(tableName);
+        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName || ' ORDER BY ' || getPkColumns(tableName) ;
 
         sqlCmd := '
             DECLARE
@@ -191,4 +195,4 @@ BEGIN
 END;
 /
 
-
+EXIT

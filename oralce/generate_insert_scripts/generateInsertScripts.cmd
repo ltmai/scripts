@@ -10,7 +10,10 @@ chcp 1252
 :: set Oracle client encoding to the same codepage Windows-1252
 set NLS_LANG=.WE8MSWIN1252
 
-sqlplus scott/tiger@SALE @generateInsertScript
+sqlplus scott/tiger@ORCL @generateInsertScripts
 
-:: Todo remove trailing spaces and the line PL/SQL procedure successfully completed.
+powershell -file TrimTrailingSpacesInFile.ps1 INSERTscript.LST INSERTscript.sql
+
+del INSERTscript.LST
+
 endlocal

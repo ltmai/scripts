@@ -3,7 +3,7 @@ SET WRAP ON
 SET VERIFY OFF
 SET SERVEROUTPUT ON
 WHENEVER SQLERROR EXIT
-SPOOL INSERTscript.sql REPLACE
+SPOOL INSERTscript REPLACE
 
 DECLARE
 
@@ -61,7 +61,23 @@ DECLARE
             RETURN ret;
         END getFieldList;
 
+        /*
+        ** get name of first column in table
+        */
+        FUNCTION getFirstColumn(tableName VARCHAR2)
+            RETURN VARCHAR2
+        AS
+            colName all_tab_columns.column_name%TYPE;
+        BEGIN
+            SELECT column_name
+              INTO colName
+              FROM all_tab_columns
+             WHERE table_name=tableName
+               AND column_id=1;
 
+            RETURN lower(colName);
+        END getFirstColumn;
+    
         /*
         ** returns primary key columns separated by comma
         */
@@ -84,6 +100,16 @@ DECLARE
 
             RETURN ret;
         END getPkColumns;
+        
+        /*
+        ** generate ORDER BY clause
+        */
+        FUNCTION getOrderByClause(tableName VARCHAR)    
+            RETURN VARCHAR2
+        AS
+        BEGIN
+            RETURN NVL(getPkColumns(tableName), getFirstColumn(tableName));
+        END getOrderByClause;        
 
         /*
         ** returns column value as text depending on column data type
@@ -149,7 +175,7 @@ DECLARE
 
     BEGIN -- createInsertScript
 
-        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName || ' ORDER BY ' || getPkColumns(tableName) ;
+        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName || ' ORDER BY ' || getOrderByClause(tableName) ;
 
         sqlCmd := '
             DECLARE
@@ -186,8 +212,10 @@ BEGIN
 
     DBMS_OUTPUT.PUT_LINE('BEGIN');
 
-    createInsertScript('departments');
-    createInsertScript('employees');
+    createInsertScript('dept');
+    createInsertScript('emp');
+    createInsertScript('bonus');
+    createInsertScript('salgrade');
 
     DBMS_OUTPUT.PUT_LINE('END;');
     DBMS_OUTPUT.PUT_LINE('/');

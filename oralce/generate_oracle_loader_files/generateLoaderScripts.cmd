@@ -6,12 +6,13 @@ setlocal
 
 del output\*.dat
 
-set dbconn=username/password@ORACLE
+set dbconn=scott/tiger@ORCL
 
 :: change table name, add tables as 
-sqlplus %dbconn% @generateLoaderScript table1
-sqlplus %dbconn% @generateLoaderScript table2
-sqlplus %dbconn% @generateLoaderScript table3
+sqlplus %dbconn% @generateLoaderScript dept
+sqlplus %dbconn% @generateLoaderScript emp
+sqlplus %dbconn% @generateLoaderScript bonus
+sqlplus %dbconn% @generateLoaderScript salgrade
 
 :: remove trailing spaces
 @for %%a in (output\*.LST) do ( 

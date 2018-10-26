@@ -1,0 +1,28 @@
+--------------------------------------------------------------------------
+-- SQL*Loader control file that describes how to load the data into table.
+--------------------------------------------------------------------------
+LOAD DATA
+INFILE *
+DISCARDFILE salgrade.dsc
+REPLACE
+INTO TABLE salgrade
+WHEN (grade != "#")
+FIELDS TERMINATED BY ","
+OPTIONALLY ENCLOSED BY '~'
+(
+grade,       -- NUMBER(22)
+losal,       -- NUMBER(22)
+hisal        -- NUMBER(22)
+)
+BEGINDATA
+#,----------------------------------------------------------------------
+#,
+#,----------------------------------------------------------------------
+#, grade    ,losal    ,hisal
+~1~	,~700~	,~1200~
+~2~	,~1201~	,~1400~
+~3~	,~1401~	,~2000~
+~4~	,~2001~	,~3000~
+~5~	,~3001~	,~9999~
+
+

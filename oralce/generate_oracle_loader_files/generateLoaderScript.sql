@@ -6,7 +6,28 @@ WHENEVER SQLERROR EXIT
 SPOOL output/&1 REPLACE
 
 /*
- * the following script dynamically generates a loader file given table name
+ * The following script dynamically generates a loader file given table name.
+   Sample output: 
+    LOAD DATA
+    INFILE *
+    DISCARDFILE bonus.dsc
+    REPLACE
+    INTO TABLE bonus
+    WHEN (ename != "#")
+    FIELDS TERMINATED BY ","
+    OPTIONALLY ENCLOSED BY '~'
+    (
+    ename,      -- VARCHAR2(10)
+    job,        -- VARCHAR2(9)
+    sal,        -- NUMBER(22)
+    comm        -- NUMBER(22)
+    )
+    BEGINDATA
+    #,----------------------------------------------------------------------
+    #,
+    #,----------------------------------------------------------------------
+    #, ename    ,job        ,sal    ,comm
+    ~SCOTT~     ,~ANALYST~  ,~3000~ ,~~
  */
 DECLARE
     /*
@@ -45,7 +66,7 @@ DECLARE
     IS
     BEGIN
         RETURN replace(s, '''', '''''');
-    END;
+    END escapeSingleQuote;
 
     /*
     ** get name of first column in table
@@ -62,10 +83,10 @@ DECLARE
            AND column_id=1;
 
         RETURN lower(colName);
-    END;
+    END getFirstColumn;
     
     /*
-    ** return primary key columns separated by comma
+    ** return PRIMARY KEY columns separated by comma
     */
     FUNCTION getPkColumns(tableName VARCHAR2)
         RETURN VARCHAR2
@@ -85,10 +106,22 @@ DECLARE
         END LOOP;
 
         RETURN ret;
-    END;    
+    END getPkColumns;  
+
+    /*
+    ** generate ORDER BY clause
+    */
+    FUNCTION getOrderByClause(tableName VARCHAR)    
+        RETURN VARCHAR2
+    AS
+    BEGIN
+        RETURN NVL(getPkColumns(tableName), getFirstColumn(tableName));
+    END getOrderByClause;
 
     /*
     ** generates the PL/SQL command to print a row in table
+    ** Example:
+    ** ~SCOTT~     ,~ANALYST~  ,~3000~ ,~~
     */
     FUNCTION generateRowCommand(tableName VARCHAR2)
         RETURN VARCHAR2
@@ -104,11 +137,12 @@ DECLARE
         line := substr(line, 1, length(line)-14);
 
         RETURN 'dbms_output.put_line(''' || line || ');';
-    END;
+    END generateRowCommand;
 
     /*
     ** generates header line
-    ** #, coord    ,redirect_dest ,rgid ,whithinstore ,rotating_inc ,flowname
+    ** Example:    
+    ** #, ename    ,job    ,sal    ,comm
     */
     FUNCTION generateHeaderLine(tableName VARCHAR2)
         RETURN VARCHAR2
@@ -133,14 +167,15 @@ DECLARE
         END LOOP;
 
         RETURN 'dbms_output.put_line(''' || headerLine || ''');';
-    END;
+    END generateHeaderLine;
 
     /*
-    ** generates column specs similar to the following
-    ** tmname,            -- VARCHAR2 (6) NOT NULL
-    ** deviceid,          -- NUMBER NOT NULL
-    ** forkId,            -- NUMBER NOT NULL
-    ** locked             -- NUMBER NOT NULL
+    ** generates column specs.
+    ** Example:
+    ** ename,      -- VARCHAR2(10)
+    ** job,        -- VARCHAR2(9)
+    ** sal,        -- NUMBER(22)
+    ** comm        -- NUMBER(22)
     */
     FUNCTION generateColumnSpecs(tableName VARCHAR2)
         RETURN VARCHAR2
@@ -196,18 +231,14 @@ DECLARE
         END LOOP;
 
         RETURN columnSpec;
-    END;
+    END generateColumnSpecs;
+    
 BEGIN
     sqlCmd := '
       BEGIN
-          dbms_output.put_line(''------------------------------------------------------------------------'');
-          dbms_output.put_line(''-- (c) 2018 ENisco GmbH u. Co KG                                        '');
-          dbms_output.put_line(''--                                                                      '');
-          dbms_output.put_line(''--                                                                      '');
-          dbms_output.put_line(''--                                                                      '');
-          dbms_output.put_line(''-- SQL*Loader control file that describes how to load the data          '');
-          dbms_output.put_line(''-- into table                                                           '');
-          dbms_output.put_line(''------------------------------------------------------------------------'');
+          dbms_output.put_line(''--------------------------------------------------------------------------'');
+          dbms_output.put_line(''-- SQL*Loader control file that describes how to load the data into table.'');
+          dbms_output.put_line(''--------------------------------------------------------------------------'');
           dbms_output.put_line('''');
           dbms_output.put_line(''LOAD DATA'');
           dbms_output.put_line(''INFILE *'');
@@ -230,7 +261,7 @@ BEGIN
           '
           || generateHeaderLine(tableName) ||
           '
-          FOR r IN (SELECT * FROM ' || tableName || ' ORDER BY ' || getPkColumns(tableName) ||  ')
+          FOR r IN (SELECT * FROM ' || tableName || ' ORDER BY ' || getOrderByClause(tableName) ||  ')
           LOOP
                ' || generateRowCommand(tableName) || '
           END LOOP;

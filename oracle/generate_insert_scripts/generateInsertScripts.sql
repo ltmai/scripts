@@ -24,6 +24,13 @@ SPOOL INSERTscript REPLACE
 
 DECLARE
 
+    /*
+    ** createInsertScript creates a PL/SQL code and executes it dynamically
+    ** to generate INSERT statements for a given table.
+    ** Note that table column data type is limited to specific types, as in 
+    ** function getColumnValue(), this function needs to be extended to 
+    ** handle data types other than these.
+    */
     PROCEDURE createInsertScript(tableNameIn VARCHAR2)
     IS
         tableName VARCHAR2(32) := UPPER(tableNameIn);
@@ -119,7 +126,9 @@ DECLARE
         END getPkColumns;
         
         /*
-        ** generate ORDER BY clause
+        ** generates ORDER BY clause in the SELECT statement.
+        ** If table has primary key then order records by primary key, 
+        ** otherwise order by the first column in table.
         */
         FUNCTION getOrderByClause(tableName VARCHAR)    
             RETURN VARCHAR2
@@ -219,7 +228,7 @@ DECLARE
               END LOOP;
               dbms_output.put_line(''    COMMIT;'');
             END;';
-
+    
         --DBMS_OUTPUT.PUT_LINE(sqlCmd);
         EXECUTE IMMEDIATE sqlCmd;
 

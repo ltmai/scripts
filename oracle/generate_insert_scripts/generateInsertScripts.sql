@@ -27,11 +27,14 @@ DECLARE
     /*
     ** createInsertScript creates a PL/SQL code and executes it dynamically
     ** to generate INSERT statements for a given table.
-    ** Note that table column data type is limited to specific types, as in 
-    ** function getColumnValue(), this function needs to be extended to 
-    ** handle data types other than these.
+    ** Note that table column data type is limited to specific data types 
+    ** handled in function getColumnValue(), this function needs to be extended  
+    ** if necessary.
+    **
+    ** @param tableNameIn : input table name
+    ** @param orderClause : (optional) order clause, use primary key by default
     */
-    PROCEDURE createInsertScript(tableNameIn VARCHAR2)
+    PROCEDURE createInsertScript(tableNameIn VARCHAR2, orderClause VARCHAR2 DEFAULT NULL)
     IS
         tableName VARCHAR2(32) := UPPER(tableNameIn);
 
@@ -201,7 +204,14 @@ DECLARE
 
     BEGIN -- createInsertScript
 
-        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName || ' ORDER BY ' || getOrderByClause(tableName) ;
+        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName || ' ORDER BY ';
+
+        IF (orderClause IS NULL)
+        THEN
+            selectCmd := selectCmd || getPkColumns(tableName);
+        ELSE
+            selectCmd := selectCmd || orderClause;
+        END IF;
 
         sqlCmd := '
             DECLARE

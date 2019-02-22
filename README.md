@@ -2,6 +2,12 @@
 
 ## Oracle
 
+We will use schema tiger for testing. Login as user SYS AS SYSDBA and unlock it as follows:
+
+```sql
+SQL> ALTER USER scott IDENTIFIED BY tiger ACCOUNT UNLOCK;
+```
+
 1. Generate INSERT script
    
 The script `oracle\generate_insert_scripts\generateInsertScript.sql` contains the code and its 

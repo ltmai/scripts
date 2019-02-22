@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------
 -- SQL*Loader control file that describes how to load the data into table.
 --------------------------------------------------------------------------
+
 LOAD DATA
 INFILE *
 DISCARDFILE salgrade.dsc
@@ -9,11 +10,13 @@ INTO TABLE salgrade
 WHEN (grade != "#")
 FIELDS TERMINATED BY ","
 OPTIONALLY ENCLOSED BY '~'
+
 (
-grade,       -- NUMBER(22)
-losal,       -- NUMBER(22)
+grade,        -- NUMBER(22)
+losal,        -- NUMBER(22)
 hisal        -- NUMBER(22)
 )
+
 BEGINDATA
 #,----------------------------------------------------------------------
 #,

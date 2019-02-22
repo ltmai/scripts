@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------
 -- SQL*Loader control file that describes how to load the data into table.
 --------------------------------------------------------------------------
+
 LOAD DATA
 INFILE *
 DISCARDFILE dept.dsc
@@ -9,19 +10,21 @@ INTO TABLE dept
 WHEN (deptno != "#")
 FIELDS TERMINATED BY ","
 OPTIONALLY ENCLOSED BY '~'
+
 (
-deptno,    -- NUMBER(22) NOT NULL
-dname,     -- VARCHAR2(14)
+deptno,        -- NUMBER(22) NOT NULL
+dname,        -- VARCHAR2(14)
 loc        -- VARCHAR2(13)
 )
+
 BEGINDATA
 #,----------------------------------------------------------------------
 #,
 #,----------------------------------------------------------------------
 #, deptno    ,dname    ,loc
-~10~	    ,~ACCOUNTING~	,~NEW YORK~
-~20~	    ,~RESEARCH~	    ,~DALLAS~
-~30~	    ,~SALES~	    ,~CHICAGO~
-~40~	    ,~OPERATIONS~	,~BOSTON~
+~10~	,~ACCOUNTING~	,~NEW YORK~
+~20~	,~RESEARCH~	,~DALLAS~
+~30~	,~SALES~	,~CHICAGO~
+~40~	,~OPERATIONS~	,~BOSTON~
 
 

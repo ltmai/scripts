@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------
 -- SQL*Loader control file that describes how to load the data into table.
 --------------------------------------------------------------------------
+
 LOAD DATA
 INFILE *
 DISCARDFILE bonus.dsc
@@ -9,12 +10,14 @@ INTO TABLE bonus
 WHEN (ename != "#")
 FIELDS TERMINATED BY ","
 OPTIONALLY ENCLOSED BY '~'
+
 (
-ename,      -- VARCHAR2(10)
+ename,        -- VARCHAR2(10)
 job,        -- VARCHAR2(9)
 sal,        -- NUMBER(22)
 comm        -- NUMBER(22)
 )
+
 BEGINDATA
 #,----------------------------------------------------------------------
 #,

@@ -216,7 +216,7 @@ DECLARE
 
         IF (orderClause IS NULL)
         THEN
-            selectCmd := selectCmd || getPkColumns(tableName);
+            selectCmd := selectCmd || getOrderByClause(tableName);
         ELSE
             selectCmd := selectCmd || orderClause;
         END IF;

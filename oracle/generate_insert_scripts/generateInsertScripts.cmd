@@ -16,7 +16,7 @@
 :: along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 :: The following is an example wrapper script to setup environment for 
-:: running SQL script that write text with special characters (German)
+:: running SQL script that writes text with special characters (German)
 
 @ECHO OFF
 

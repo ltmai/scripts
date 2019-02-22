@@ -27,14 +27,15 @@ DECLARE
     /*
     ** createInsertScript creates a PL/SQL code and executes it dynamically
     ** to generate INSERT statements for a given table.
-    ** Note that table column data type is limited to specific data types 
-    ** handled in function getColumnValue(), this function needs to be extended  
+    ** Note that table column data type is limited to specific data types
+    ** handled in function getColumnValue(), this function needs to be extended
     ** if necessary.
     **
     ** @param tableNameIn : input table name
-    ** @param orderClause : (optional) order clause, use primary key by default
+    ** @param whereClause : (optional) WHERE clause
+    ** @param orderClause : (optional) ORDER BY clause, use primary key by default
     */
-    PROCEDURE createInsertScript(tableNameIn VARCHAR2, orderClause VARCHAR2 DEFAULT NULL)
+    PROCEDURE createInsertScript(tableNameIn VARCHAR2, whereClause VARCHAR2 DEFAULT NULL, orderClause VARCHAR2 DEFAULT NULL)
     IS
         tableName VARCHAR2(32) := UPPER(tableNameIn);
 
@@ -104,7 +105,7 @@ DECLARE
 
             RETURN lower(colName);
         END getFirstColumn;
-    
+
         /*
         ** returns primary key columns separated by comma
         */
@@ -127,18 +128,18 @@ DECLARE
 
             RETURN ret;
         END getPkColumns;
-        
+
         /*
         ** generates ORDER BY clause in the SELECT statement.
-        ** If table has primary key then order records by primary key, 
+        ** If table has primary key then order records by primary key,
         ** otherwise order by the first column in table.
         */
-        FUNCTION getOrderByClause(tableName VARCHAR)    
+        FUNCTION getOrderByClause(tableName VARCHAR)
             RETURN VARCHAR2
         AS
         BEGIN
             RETURN NVL(getPkColumns(tableName), getFirstColumn(tableName));
-        END getOrderByClause;        
+        END getOrderByClause;
 
         /*
         ** returns column value as text depending on column data type
@@ -204,7 +205,14 @@ DECLARE
 
     BEGIN -- createInsertScript
 
-        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName || ' ORDER BY ';
+        selectCmd := 'SELECT ' || getFieldList(tableName) || ' FROM ' || tableName ;
+
+        IF (whereClause IS NOT NULL)
+        THEN
+            selectCmd := selectCmd || ' WHERE ' || whereClause;
+        END IF;
+
+        selectCmd := selectCmd || ' ORDER BY ';
 
         IF (orderClause IS NULL)
         THEN
@@ -238,20 +246,19 @@ DECLARE
               END LOOP;
               dbms_output.put_line(''    COMMIT;'');
             END;';
-    
+
         --DBMS_OUTPUT.PUT_LINE(sqlCmd);
         EXECUTE IMMEDIATE sqlCmd;
 
-    END createInsertScript; 
+    END createInsertScript;
 
 BEGIN
-
     DBMS_OUTPUT.PUT_LINE('BEGIN');
 
-    createInsertScript('dept');
-    createInsertScript('emp');
-    createInsertScript('bonus');
-    createInsertScript('salgrade');
+    createInsertScript(tableNameIn => 'dept');
+    createInsertScript(tableNameIn => 'emp', whereClause => 'deptno=10', orderClause => 'ename');
+    createInsertScript(tableNameIn => 'bonus');
+    createInsertScript(tableNameIn => 'salgrade');
 
     DBMS_OUTPUT.PUT_LINE('END;');
     DBMS_OUTPUT.PUT_LINE('/');

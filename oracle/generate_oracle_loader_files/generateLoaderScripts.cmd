@@ -23,20 +23,22 @@ SETLOCAL
 
 DEL output\*.dat
 
+:: Change Oracle connection string here
+:: Syntax: username/password@SID
 SET dbconn=scott/tiger@ORACLE
 
-:: change table name, add tables as 
+:: Change table names or add new tables here
 sqlplus %dbconn% @generateLoaderScript dept
 sqlplus %dbconn% @generateLoaderScript emp
 sqlplus %dbconn% @generateLoaderScript bonus
 sqlplus %dbconn% @generateLoaderScript salgrade
 
-:: remove trailing spaces
+:: Remove trailing spaces
 @FOR %%a IN (output\*.LST) DO ( 
     powershell -file TrimTrailingSpacesInFile.ps1 %%a output\%%~na.dat
 )
 
-:: remove .LST files
+:: Remove .LST files
 DEL output\*.LST
 
 ENDLOCAL

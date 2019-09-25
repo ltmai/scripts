@@ -67,7 +67,20 @@ DECLARE
              ORDER BY cols.table_name, cols.position;
 
         /*
-        ** returns fields separated by comma
+        ** FK-referenced tables
+        */
+        CURSOR refTables(tableName VARCHAR2)
+        IS
+            SELECT cons2.table_name AS REFERENCED_TABLE, cons1.constraint_name AS FK_CONSTRAINT, cons2.constraint_name AS REFERENCED_CONSTRAINT
+              FROM user_constraints cons1, user_constraints cons2
+             WHERE cons1.table_name = tableName
+               AND cons1.constraint_type = 'R'                     -- FK only
+               AND cons2.constraint_name = cons1.r_constraint_name -- referenced constraint
+               AND cons1.table_name <> cons2.table_name            -- not self-referenced
+             ORDER BY cons2.table_name;
+
+        /*
+        ** returns fields separated by commas
         */
         FUNCTION getFieldList(tableName VARCHAR2)
             RETURN VARCHAR2
@@ -88,6 +101,29 @@ DECLARE
 
             RETURN ret;
         END getFieldList;
+
+        /*
+        ** returns referenced tables separated by commas
+        */
+        FUNCTION getRefTables(tableName VARCHAR2)
+            RETURN VARCHAR2
+        IS
+            ret VARCHAR2(1024);
+            fst BOOLEAN := TRUE;
+        BEGIN
+            FOR r IN refTables(tableName)
+            LOOP
+                IF (fst)
+                THEN
+                    fst := FALSE;
+                    ret := ret || r.referenced_table;
+                ELSE
+                    ret := ret || ', ' || r.referenced_table;
+                END IF;
+            END LOOP;
+
+            RETURN NVL(ret, 'NONE');
+        END getRefTables;
 
         /*
         ** get name of first column in table
@@ -134,7 +170,7 @@ DECLARE
         ** If table has primary key then order records by primary key,
         ** otherwise order by the first column in table.
         */
-        FUNCTION getOrderByClause(tableName VARCHAR)
+        FUNCTION getOrderByClause(tableName VARCHAR2)
             RETURN VARCHAR2
         AS
         BEGIN
@@ -237,6 +273,8 @@ DECLARE
 
             BEGIN
               dbms_output.put_line(''    -- table ' || tableName || ' --'');
+              dbms_output.put_line(''    -- execute after inserts on ' || getRefTables(tableName) || ' --'');
+
               FOR r IN (' || selectCmd || ')
               LOOP
                   insertCmd := ''    INSERT INTO ' || tableName || ' (' || getFieldList(tableName) || ') VALUES ('';'

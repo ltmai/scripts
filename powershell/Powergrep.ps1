@@ -8,7 +8,7 @@ param (
 Write-Host Pattern=$pattern
 Write-Host Wildcard=$wildcard
 
-$fileInfos = Get-ChildItem -File $wildcard
+$fileInfos = Get-ChildItem -File $wildcard -Recurse
 
 foreach ($fileInfo in $fileInfos) 
 {

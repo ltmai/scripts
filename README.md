@@ -1,14 +1,21 @@
-# Various scripts
 
-## Oracle
+# Oracle scripts
 
-We will use schema tiger for testing. Login as user SYS AS SYSDBA and unlock it as follows:
+In oder to test the scripts you may use the built-in schema `tiger`. This schema is locked by 
+default, but can be unlocked by user SYS AS SYSDBA as follows:
 
 ```sql
 SQL> ALTER USER scott IDENTIFIED BY tiger ACCOUNT UNLOCK;
 ```
 
-1. Generate INSERT script
+## 1. Generate INSERT script
+   
+- generateInsertScripts.cmd
+- generateInsertScripts.sql
+- TrimTrailingSpacesInFile.ps1
+- INSERTscript.sql
+
+   
    
 The script `oracle\generate_insert_scripts\generateInsertScript.sql` contains the code and its 
 example use. In general the syntax is `createInsertScript(tableName, customWhereClause, customOrderByClause)`
@@ -27,7 +34,7 @@ END;
 The batch file `generateInsertScript.cmd` is only a wrapper to run the SQL script and trim trailing 
 white spaces in output file. 
 
-2. Generate LOADER files
+## 2. Generate LOADER files
 
 The script `oracle\generate_oracle_loader_files\generateLoaderScript.sql` contains the SQL code.
 The batch file `generateLoaderScripts.cmd` is a wrapper to run this script and also provides some
@@ -46,29 +53,28 @@ sqlplus %dbconn% @generateLoaderScript bonus
 sqlplus %dbconn% @generateLoaderScript salgrade
 ```
 
-## Windows Batch
+# Windows Batch
 
-1. env.cmd - Initialize console settings 
+## 1. env.cmd - Initialize console settings 
 
-This script is an example of initializing the Windows console settings at startup. It is place to
-set environment variables, change the dafault command prompt, define doskey macros, and so on.
+This script is an example of initializing Windows console at startup. It is a place to set environment variables, change the default command prompt, define doskey macros, and so on.
 
-2. head.cmd - Show the first lines in file
+## 2. head.cmd - Show the first lines in file
 
-3. line.cmd - Show specific line in file
+## 3. line.cmd - Show specific line in file
 
-4. which.cmd - Locate the executable
+## 4. which.cmd - Locate the executable
 
-## Powershell
+# Powershell
 
-1. Powergrep.ps1
+## 1. Powergrep.ps1
 
-2. ReplaceTextInFile.ps1
+## 2. ReplaceTextInFile.ps1
 
-3. TrimTrailingSpacesInFile.ps1
+## 3. TrimTrailingSpacesInFile.ps1
 
-4. FilterFileContentNotLike.ps1
+## 4. FilterFileContentNotLike.ps1
 
-5. ExtractRemoteHost.ps1
+## 5. ExtractRemoteHost.ps1
 
-6. WildflyHttpConnections.ps1
+## 6. WildflyHttpConnections.ps1

@@ -45,4 +45,4 @@ doskey ls=dir /p /b     $*
 doskey ll=dir /p /q /tw $*
 doskey ld=dir /p /ad    $*
 doskey grep=findstr /i /s /p /n /a:E /c:$*
-doskey ffind=dir /s /p $*
+doskey ffind=dir /s /p /b $*

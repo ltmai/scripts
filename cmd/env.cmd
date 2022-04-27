@@ -14,8 +14,10 @@ title %USERNAME%@%COMPUTERNAME%
 :: set NLS_LANG=american_america.WE8MSWIN1252
 :: GERMAN
 :: Windows Terminal codepage 1252 (West European Latin)
-chcp 1252
-set NLS_LANG=german_germany.WE8MSWIN1252
+:: chcp 1252
+:: set NLS_LANG=german_germany.WE8MSWIN1252
+:: Windows Terminal codepage 65001 (UTF-8)
+chcp 65001
 
 :: See https://ss64.com/nt/prompt.html
 :: $A  &           (Ampersand) 
@@ -37,12 +39,20 @@ set NLS_LANG=german_germany.WE8MSWIN1252
 :: $_  Carriage return and linefeed 
 :: $$  $           (dollar sign)
 :: $+  Will display plus signs (+) one for each level of the PUSHD directory stack
-set prompt=$_$E[0;1;32m$p$_$s$G$s$E[37m
-::set prompt=$_┌$s$E[0;1;32m$p$E[37m$_└$G$S
+:: Fancy command prompt!
+set prompt=$_┌$s$E[0;1;32m$p$E[37m$_└$G$S
+
+set EDITOR=C:\Program Files (x86)\Notepad++\notepad++.exe
 
 :: unix commands for fun
+:: In doskey macros % must be escaped as %%, except in variable expansion
 doskey ls=dir /p /b     $*
 doskey ll=dir /p /q /tw $*
 doskey ld=dir /p /ad    $*
-doskey grep=findstr /i /s /p /n /a:E /c:$*
 doskey ffind=dir /s /p /b $*
+doskey clear=cls
+doskey grep=findstr /i /s /p /n /a:E /c:$*
+doskey edit=for /F "tokens=*" %%i in ('dir /s /p /b $1') do @"%EDITOR%" %%i
+doskey touch=copy /b $* +,, >nul
+doskey gitlog=git log --graph --abbrev-commit --pretty=format:"%%Cred%%h%%Creset -%%Cgreen(%%ci) %%C(yellow)%%d%%Creset %%s %%C(bold blue)<%%an>%%Creset" -5
+doskey tom=start cmd /c powershell -f C:\bin\scripts\turnoffmonitor.ps1

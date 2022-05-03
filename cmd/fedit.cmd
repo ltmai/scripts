@@ -35,10 +35,14 @@ FOR /f "tokens=*" %%a IN ('dir /s /p /b /a-d *%1*') DO (
   SET /a CNT=CNT+1
 )
 
-IF !CNT! EQU 2 (
-    SET /a SEL=1
-) ELSE (
-    SET /p SEL=Choose file to edit: 
+IF !CNT! EQU 1 (
+    GOTO :EOF 
+) ELSE ( 
+    IF !CNT! EQU 2 (
+        SET /a SEL=1
+    ) ELSE (
+        SET /p SEL=Choose file to edit: 
+    )
 )
 
 :: Validate input
@@ -54,6 +58,7 @@ SET SEL=XYZ_!SEL!
 SET sel=!%SEL%!
 ::echo !SEL!
 
-IF EXIST "!SEL!" "%MY_EDITOR%" "!SEL!"
+:: START interprets the first quoted argument it finds as the window title for a new console window.
+IF EXIST "!SEL!" START "" "%MY_EDITOR%" "!SEL!"
 
 ENDLOCAL

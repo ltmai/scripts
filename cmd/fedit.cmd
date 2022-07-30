@@ -1,5 +1,5 @@
 ::------------------------------------------------------------------------------
-:: Locate executables
+:: Find and edit
 :: Copyright (C) 2019  - Linh Mai
 :: 
 :: This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,18 @@
 :: along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ::----------------------------------------------------------------------------
 
-:: This script searches for executable of types .EXE, .CMD and .BAT 
-:: in environment variable %PATH%.
-:: Syntax: which <executable without extension>
-:: Example: which grep
+:: This script finds all files under the current directory whose name
+:: can be found with the provided input (e.g. pom would result in all
+:: pom.xml and pom.properties). The file found are listed with number
+:: which you can choose to edit. The editor is specified by environment
+:: variable MY_EDITOR (to avoid clashing with other programs). If only
+:: one file is found, the file is directly opened by the editor.
+:: Example: C:\projects\fly-to-moon-and-back> fedit pom
+:: [1] C:\projects\fly-to-moon-and-back\fly\pom.xml
+:: [2] C:\projects\fly-to-moon-and-back\fly-war\pom.xml
+:: [3] C:\projects\fly-to-moon-and-back\fly-ear\pom.xml
+:: [4] C:\projects\fly-to-moon-and-back\fly-war\target\maven-archiver\pom.properties
+:: Choose file to edit: _
 
 @ECHO off
 

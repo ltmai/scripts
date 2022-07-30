@@ -18,7 +18,7 @@
 
 :: This script finds all files under the current directory whose name
 :: can be found with the provided input (e.g. pom would result in all
-:: pom.xml and pom.properties). The file found are listed with number
+:: pom.xml and pom.properties). The files found are listed with number
 :: which you can choose to edit. The editor is specified by environment
 :: variable MY_EDITOR (to avoid clashing with other programs). If only
 :: one file is found, the file is directly opened by the editor.

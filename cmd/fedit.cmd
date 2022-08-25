@@ -55,7 +55,7 @@ IF !CNT! EQU 1 (
 
 :: Validate input
 IF "!SEL!" EQU "" GOTO :EOF
-IF "!SEL!" GEQ "!CNT!" GOTO :EOF
+IF !SEL! GEQ !CNT! GOTO :EOF
 
 :: Set SEL to smt like XYZ_3
 SET SEL=XYZ_!SEL!

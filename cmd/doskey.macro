@@ -1,0 +1,35 @@
+;=================;
+;= macros  ;
+;=================;
+
+;= unix commands for fun
+;= In batch file % must be escaped as %%, except in variable expansion
+ls=dir /p /b      $*
+ll=dir /p /q /tw  $*
+ld=dir /p /ad /b  $*
+lf=dir /p /a-d /b $*
+..=cd ..
+....=cd ../..
+
+clear=cls
+ffind=dir /s /p /b $*
+apropos=dir /s /p /b *$1*
+grep=findstr /i /s /p /n /a:E /c:$*
+edit=for /F "tokens=*" %%i in ('dir /s /p /b /a-d $1') do @"%MY_EDITOR%" %%i
+touch=copy /b $* +,, >nul
+
+;= git tools
+gitlog=git log --graph --abbrev-commit --pretty=format:"%%Cred%%h%%Creset -%%Cgreen(%%ci) %%C(yellow)%%d%%Creset %%s %%C(bold blue)<%%an>%%Creset" -$1
+gitdf=git diff $*
+gitdiff=git difftool -g -y $* 
+
+;= use git aliases
+gitst=git st
+gitdv=git dv $*
+gitlog=git lg
+
+;= turn off monitor
+tom=start cmd /c powershell -f C:\bin\scripts\TurnOffMonitor.ps1
+
+;= loop forever and run command (example: loop @sleep 5 && grep "NullPointerException" server.log)
+loop=for /L %%i in (1,0,2) do $*

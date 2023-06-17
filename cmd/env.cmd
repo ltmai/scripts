@@ -45,17 +45,4 @@ set prompt=$_┌$s$E[0;1;32m$p$E[37m$_└$G$S
 :: Avoid clashing with other application
 set MY_EDITOR=C:\Program Files (x86)\Notepad++\notepad++.exe
 
-:: unix commands for fun
-:: In batch file % must be escaped as %%, except in variable expansion
-doskey ls=dir /p /b      $*
-doskey ll=dir /p /q /tw  $*
-doskey ld=dir /p /ad /b  $*
-doskey lf=dir /p /a-d /b $*
-doskey clear=cls
-doskey ffind=dir /s /p /b $*
-doskey apropos=dir /s /p /b *$1*
-doskey grep=findstr /i /s /p /n /a:E /c:$*
-doskey edit=for /F "tokens=*" %%i in ('dir /s /p /b /a-d $1') do @"%MY_EDITOR%" %%i
-doskey touch=copy /b $* +,, >nul
-doskey gitlog=git log --graph --abbrev-commit --pretty=format:"%%Cred%%h%%Creset -%%Cgreen(%%ci) %%C(yellow)%%d%%Creset %%s %%C(bold blue)<%%an>%%Creset" -$1
-doskey tom=start cmd /c powershell -f C:\bin\scripts\turnoffmonitor.ps1
+doskey /MACROFILE=doskey.macro

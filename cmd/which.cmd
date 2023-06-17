@@ -23,6 +23,7 @@
 
 @ECHO off
 
+:: see https://ss64.com/nt/delayedexpansion.html
 SETLOCAL ENABLEDELAYEDEXPANSION
 
 SET /a cnt=1
@@ -30,17 +31,20 @@ SET /a cnt=1
 :FORLOOP
 
 FOR /f "delims=; tokens=%cnt%" %%a in ("%PATH%") DO (
-  SET /a cnt=cnt+1 
-  
-  IF EXIST %%a\%1.exe ECHO %%a\%1.exe
-  IF EXIST %%a\%1.cmd ECHO %%a\%1.cmd
-  IF EXIST %%a\%1.bat ECHO %%a\%1.bat
+  SET /a cnt+=1   
+  IF EXIST "%%a\%1.exe" ECHO %%a\%1.exe
+  IF EXIST "%%a\%1.cmd" ECHO %%a\%1.cmd
+  IF EXIST "%%a\%1.bat" ECHO %%a\%1.bat 
   rem Do not use double colon (::) inside a parenthesis
   rem block, which will cause the error message:
-  rem "The system cannot find the drive specified."  
+  rem "The system cannot find the drive specified."
+  rem   
   rem Within a FOR loop the visibility of FOR variables 
-  rem is controlled via SETLOCAL EnableDelayedExpansion 
+  rem is controlled via SETLOCAL ENABLEDELAYEDEXPANSION.
+  rem When ENABLEDELAYEDEXPANSION is on, variables can
+  rem be immediately read using !variable_name!
   rem ECHO !cnt!
+  
   IF %ERRORLEVEL% NEQ 0 (
      GOTO :EOF
   )
